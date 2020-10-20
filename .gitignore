@@ -1,7 +1,3 @@
-/*
-!.gitignore
-!*.cpp
-!*.hpp
-!*.am
-!Makefile
-!*.sh
+*.o
+*.Po
+/bson
