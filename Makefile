@@ -124,7 +124,8 @@ am_yhzdb_OBJECTS = pmd/yhzdb-pmdMain.$(OBJEXT) \
 	bson/src/lib/yhzdb-base64.$(OBJEXT) \
 	bson/src/lib/yhzdb-md5.$(OBJEXT) \
 	bson/src/lib/yhzdb-nonce.$(OBJEXT) \
-	oss/yhzdb-ossSocket.$(OBJEXT)
+	oss/yhzdb-ossSocket.$(OBJEXT) \
+	oss/yhzdb-ossPrimitiveFileOp.$(OBJEXT)
 yhzdb_OBJECTS = $(am_yhzdb_OBJECTS)
 yhzdb_DEPENDENCIES =
 yhzdb_LINK = $(CXXLD) $(yhzdb_CXXFLAGS) $(CXXFLAGS) $(yhzdb_LDFLAGS) \
@@ -315,7 +316,7 @@ yhzdb_SOURCES = \
 		  pmd/pmdMain.cpp pmd/pmdTcpListener.cpp\
 		  bson/src/bsonobj.cpp bson/src/util/json.cpp bson/src/oid.cpp\
 		  bson/src/lib/base64.cpp bson/src/lib/md5.cpp bson/src/lib/nonce.cpp\
-      oss/ossSocket.cpp
+      oss/ossSocket.cpp oss/ossPrimitiveFileOp.cpp
 
 edb_SOURCES = \
    client/edb.cpp\
@@ -503,6 +504,8 @@ bson/src/lib/yhzdb-nonce.$(OBJEXT): bson/src/lib/$(am__dirstamp) \
 	bson/src/lib/$(DEPDIR)/$(am__dirstamp)
 oss/yhzdb-ossSocket.$(OBJEXT): oss/$(am__dirstamp) \
 	oss/$(DEPDIR)/$(am__dirstamp)
+oss/yhzdb-ossPrimitiveFileOp.$(OBJEXT): oss/$(am__dirstamp) \
+	oss/$(DEPDIR)/$(am__dirstamp)
 
 yhzdb$(EXEEXT): $(yhzdb_OBJECTS) $(yhzdb_DEPENDENCIES) $(EXTRA_yhzdb_DEPENDENCIES) 
 	@rm -f yhzdb$(EXEEXT)
@@ -536,6 +539,7 @@ include client/$(DEPDIR)/edb-command.Po
 include client/$(DEPDIR)/edb-commandFactory.Po
 include client/$(DEPDIR)/edb-edb.Po
 include oss/$(DEPDIR)/edb-ossSocket.Po
+include oss/$(DEPDIR)/yhzdb-ossPrimitiveFileOp.Po
 include oss/$(DEPDIR)/yhzdb-ossSocket.Po
 include pmd/$(DEPDIR)/yhzdb-pmdMain.Po
 include pmd/$(DEPDIR)/yhzdb-pmdTcpListener.Po
@@ -821,6 +825,20 @@ oss/yhzdb-ossSocket.obj: oss/ossSocket.cpp
 #	$(AM_V_CXX)source='oss/ossSocket.cpp' object='oss/yhzdb-ossSocket.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -c -o oss/yhzdb-ossSocket.obj `if test -f 'oss/ossSocket.cpp'; then $(CYGPATH_W) 'oss/ossSocket.cpp'; else $(CYGPATH_W) '$(srcdir)/oss/ossSocket.cpp'; fi`
+
+oss/yhzdb-ossPrimitiveFileOp.o: oss/ossPrimitiveFileOp.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -MT oss/yhzdb-ossPrimitiveFileOp.o -MD -MP -MF oss/$(DEPDIR)/yhzdb-ossPrimitiveFileOp.Tpo -c -o oss/yhzdb-ossPrimitiveFileOp.o `test -f 'oss/ossPrimitiveFileOp.cpp' || echo '$(srcdir)/'`oss/ossPrimitiveFileOp.cpp
+	$(AM_V_at)$(am__mv) oss/$(DEPDIR)/yhzdb-ossPrimitiveFileOp.Tpo oss/$(DEPDIR)/yhzdb-ossPrimitiveFileOp.Po
+#	$(AM_V_CXX)source='oss/ossPrimitiveFileOp.cpp' object='oss/yhzdb-ossPrimitiveFileOp.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -c -o oss/yhzdb-ossPrimitiveFileOp.o `test -f 'oss/ossPrimitiveFileOp.cpp' || echo '$(srcdir)/'`oss/ossPrimitiveFileOp.cpp
+
+oss/yhzdb-ossPrimitiveFileOp.obj: oss/ossPrimitiveFileOp.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -MT oss/yhzdb-ossPrimitiveFileOp.obj -MD -MP -MF oss/$(DEPDIR)/yhzdb-ossPrimitiveFileOp.Tpo -c -o oss/yhzdb-ossPrimitiveFileOp.obj `if test -f 'oss/ossPrimitiveFileOp.cpp'; then $(CYGPATH_W) 'oss/ossPrimitiveFileOp.cpp'; else $(CYGPATH_W) '$(srcdir)/oss/ossPrimitiveFileOp.cpp'; fi`
+	$(AM_V_at)$(am__mv) oss/$(DEPDIR)/yhzdb-ossPrimitiveFileOp.Tpo oss/$(DEPDIR)/yhzdb-ossPrimitiveFileOp.Po
+#	$(AM_V_CXX)source='oss/ossPrimitiveFileOp.cpp' object='oss/yhzdb-ossPrimitiveFileOp.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -c -o oss/yhzdb-ossPrimitiveFileOp.obj `if test -f 'oss/ossPrimitiveFileOp.cpp'; then $(CYGPATH_W) 'oss/ossPrimitiveFileOp.cpp'; else $(CYGPATH_W) '$(srcdir)/oss/ossPrimitiveFileOp.cpp'; fi`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique

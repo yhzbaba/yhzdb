@@ -61,7 +61,7 @@ int ossPrimitiveFileOp::Open(const char *pFilePath, unsigned int options)
   do
   {
     _fileHandle = oss_open(pFilePath, mode, 0644);
-  } while ((-1 == _fileHandle) && (EINTR == errno));
+  } while ((-1 == _fileHandle) && (EINTR == errno)); // interrupt error
 
   if (_fileHandle <= OSS_INVALID_HANDLE_FD_VALUE)
   {

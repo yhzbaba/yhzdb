@@ -10,6 +10,7 @@
  * ==================================================================
  */
 #include "ossSocket.hpp"
+#include "pd.hpp"
 
 // create a listening socket
 _ossSocket::_ossSocket(unsigned int port, int timeout)
@@ -70,17 +71,18 @@ _ossSocket::_ossSocket(int *sock, int timeout)
   rc = getsockname(_fd, (sockaddr *)&_sockAddress, &_addressLen);
   if (rc)
   {
-    printf("Failed to get sock name, error = %d", SOCKET_GETLASTERROR);
+    PD_LOG(PDERROR, "Failed to get sock name, error = %d", SOCKET_GETLASTERROR);
     _init = false;
   }
   else
   {
     rc = getpeername(_fd, (sockaddr *)&_peerAddress, &_peerAddressLen);
-    if (rc)
-    {
-      printf("Failed to get peer name, error = %d", SOCKET_GETLASTERROR);
-    }
+    PD_RC_CHECK(rc, PDERROR, "Failed to get peer name, error = %d", SOCKET_GETLASTERROR);
   }
+done:
+  return;
+error:
+  goto done;
 }
 
 int _ossSocket::initSocket()
