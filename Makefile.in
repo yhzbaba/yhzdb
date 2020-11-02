@@ -111,13 +111,15 @@ am_edb_OBJECTS = client/edb-edb.$(OBJEXT) client/edb-command.$(OBJEXT) \
 	bson/src/util/edb-json.$(OBJEXT) bson/src/edb-oid.$(OBJEXT) \
 	bson/src/lib/edb-base64.$(OBJEXT) \
 	bson/src/lib/edb-md5.$(OBJEXT) \
-	bson/src/lib/edb-nonce.$(OBJEXT) oss/edb-ossSocket.$(OBJEXT)
+	bson/src/lib/edb-nonce.$(OBJEXT) oss/edb-ossSocket.$(OBJEXT) \
+	oss/edb-ossPrimitiveFileOp.$(OBJEXT) pd/edb-pd.$(OBJEXT)
 edb_OBJECTS = $(am_edb_OBJECTS)
 edb_DEPENDENCIES =
 edb_LINK = $(CXXLD) $(edb_CXXFLAGS) $(CXXFLAGS) $(edb_LDFLAGS) \
 	$(LDFLAGS) -o $@
 am_yhzdb_OBJECTS = pmd/yhzdb-pmdMain.$(OBJEXT) \
 	pmd/yhzdb-pmdTcpListener.$(OBJEXT) \
+	pmd/yhzdb-pmdOptions.$(OBJEXT) \
 	bson/src/yhzdb-bsonobj.$(OBJEXT) \
 	bson/src/util/yhzdb-json.$(OBJEXT) \
 	bson/src/yhzdb-oid.$(OBJEXT) \
@@ -125,7 +127,7 @@ am_yhzdb_OBJECTS = pmd/yhzdb-pmdMain.$(OBJEXT) \
 	bson/src/lib/yhzdb-md5.$(OBJEXT) \
 	bson/src/lib/yhzdb-nonce.$(OBJEXT) \
 	oss/yhzdb-ossSocket.$(OBJEXT) \
-	oss/yhzdb-ossPrimitiveFileOp.$(OBJEXT)
+	oss/yhzdb-ossPrimitiveFileOp.$(OBJEXT) pd/yhzdb-pd.$(OBJEXT)
 yhzdb_OBJECTS = $(am_yhzdb_OBJECTS)
 yhzdb_DEPENDENCIES =
 yhzdb_LINK = $(CXXLD) $(yhzdb_CXXFLAGS) $(CXXFLAGS) $(yhzdb_LDFLAGS) \
@@ -313,17 +315,19 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign subdir-objects
 yhzdb_SOURCES = \
-		  pmd/pmdMain.cpp pmd/pmdTcpListener.cpp\
+		  pmd/pmdMain.cpp pmd/pmdTcpListener.cpp pmd/pmdOptions.cpp\
 		  bson/src/bsonobj.cpp bson/src/util/json.cpp bson/src/oid.cpp\
 		  bson/src/lib/base64.cpp bson/src/lib/md5.cpp bson/src/lib/nonce.cpp\
-      oss/ossSocket.cpp oss/ossPrimitiveFileOp.cpp
+      oss/ossSocket.cpp oss/ossPrimitiveFileOp.cpp\
+      pd/pd.cpp
 
 edb_SOURCES = \
    client/edb.cpp\
    client/command.cpp client/commandFactory.cpp\
    bson/src/bsonobj.cpp bson/src/util/json.cpp bson/src/oid.cpp\
    bson/src/lib/base64.cpp bson/src/lib/md5.cpp bson/src/lib/nonce.cpp\
-   oss/ossSocket.cpp
+   oss/ossSocket.cpp oss/ossPrimitiveFileOp.cpp\
+   pd/pd.cpp
 
 yhzdb_CXXFLAGS = -I../boost -Ibson/src -Iinclude -D_FILE_OFFSET_BITS=64 -ggdb -Wall -O0
 yhzdb_LDADD = -lpthread -lm -lboost_system -lboost_thread -lboost_program_options -lrt
@@ -476,6 +480,15 @@ oss/$(DEPDIR)/$(am__dirstamp):
 	@: > oss/$(DEPDIR)/$(am__dirstamp)
 oss/edb-ossSocket.$(OBJEXT): oss/$(am__dirstamp) \
 	oss/$(DEPDIR)/$(am__dirstamp)
+oss/edb-ossPrimitiveFileOp.$(OBJEXT): oss/$(am__dirstamp) \
+	oss/$(DEPDIR)/$(am__dirstamp)
+pd/$(am__dirstamp):
+	@$(MKDIR_P) pd
+	@: > pd/$(am__dirstamp)
+pd/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) pd/$(DEPDIR)
+	@: > pd/$(DEPDIR)/$(am__dirstamp)
+pd/edb-pd.$(OBJEXT): pd/$(am__dirstamp) pd/$(DEPDIR)/$(am__dirstamp)
 
 edb$(EXEEXT): $(edb_OBJECTS) $(edb_DEPENDENCIES) $(EXTRA_edb_DEPENDENCIES) 
 	@rm -f edb$(EXEEXT)
@@ -489,6 +502,8 @@ pmd/$(DEPDIR)/$(am__dirstamp):
 pmd/yhzdb-pmdMain.$(OBJEXT): pmd/$(am__dirstamp) \
 	pmd/$(DEPDIR)/$(am__dirstamp)
 pmd/yhzdb-pmdTcpListener.$(OBJEXT): pmd/$(am__dirstamp) \
+	pmd/$(DEPDIR)/$(am__dirstamp)
+pmd/yhzdb-pmdOptions.$(OBJEXT): pmd/$(am__dirstamp) \
 	pmd/$(DEPDIR)/$(am__dirstamp)
 bson/src/yhzdb-bsonobj.$(OBJEXT): bson/src/$(am__dirstamp) \
 	bson/src/$(DEPDIR)/$(am__dirstamp)
@@ -506,6 +521,7 @@ oss/yhzdb-ossSocket.$(OBJEXT): oss/$(am__dirstamp) \
 	oss/$(DEPDIR)/$(am__dirstamp)
 oss/yhzdb-ossPrimitiveFileOp.$(OBJEXT): oss/$(am__dirstamp) \
 	oss/$(DEPDIR)/$(am__dirstamp)
+pd/yhzdb-pd.$(OBJEXT): pd/$(am__dirstamp) pd/$(DEPDIR)/$(am__dirstamp)
 
 yhzdb$(EXEEXT): $(yhzdb_OBJECTS) $(yhzdb_DEPENDENCIES) $(EXTRA_yhzdb_DEPENDENCIES) 
 	@rm -f yhzdb$(EXEEXT)
@@ -518,6 +534,7 @@ mostlyclean-compile:
 	-rm -f bson/src/util/*.$(OBJEXT)
 	-rm -f client/*.$(OBJEXT)
 	-rm -f oss/*.$(OBJEXT)
+	-rm -f pd/*.$(OBJEXT)
 	-rm -f pmd/*.$(OBJEXT)
 
 distclean-compile:
@@ -538,10 +555,14 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@client/$(DEPDIR)/edb-command.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@client/$(DEPDIR)/edb-commandFactory.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@client/$(DEPDIR)/edb-edb.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@oss/$(DEPDIR)/edb-ossPrimitiveFileOp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@oss/$(DEPDIR)/edb-ossSocket.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@oss/$(DEPDIR)/yhzdb-ossPrimitiveFileOp.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@oss/$(DEPDIR)/yhzdb-ossSocket.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@pd/$(DEPDIR)/edb-pd.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@pd/$(DEPDIR)/yhzdb-pd.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@pmd/$(DEPDIR)/yhzdb-pmdMain.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@pmd/$(DEPDIR)/yhzdb-pmdOptions.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@pmd/$(DEPDIR)/yhzdb-pmdTcpListener.Po@am__quote@
 
 .cpp.o:
@@ -700,6 +721,34 @@ oss/edb-ossSocket.obj: oss/ossSocket.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(edb_CXXFLAGS) $(CXXFLAGS) -c -o oss/edb-ossSocket.obj `if test -f 'oss/ossSocket.cpp'; then $(CYGPATH_W) 'oss/ossSocket.cpp'; else $(CYGPATH_W) '$(srcdir)/oss/ossSocket.cpp'; fi`
 
+oss/edb-ossPrimitiveFileOp.o: oss/ossPrimitiveFileOp.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(edb_CXXFLAGS) $(CXXFLAGS) -MT oss/edb-ossPrimitiveFileOp.o -MD -MP -MF oss/$(DEPDIR)/edb-ossPrimitiveFileOp.Tpo -c -o oss/edb-ossPrimitiveFileOp.o `test -f 'oss/ossPrimitiveFileOp.cpp' || echo '$(srcdir)/'`oss/ossPrimitiveFileOp.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) oss/$(DEPDIR)/edb-ossPrimitiveFileOp.Tpo oss/$(DEPDIR)/edb-ossPrimitiveFileOp.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='oss/ossPrimitiveFileOp.cpp' object='oss/edb-ossPrimitiveFileOp.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(edb_CXXFLAGS) $(CXXFLAGS) -c -o oss/edb-ossPrimitiveFileOp.o `test -f 'oss/ossPrimitiveFileOp.cpp' || echo '$(srcdir)/'`oss/ossPrimitiveFileOp.cpp
+
+oss/edb-ossPrimitiveFileOp.obj: oss/ossPrimitiveFileOp.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(edb_CXXFLAGS) $(CXXFLAGS) -MT oss/edb-ossPrimitiveFileOp.obj -MD -MP -MF oss/$(DEPDIR)/edb-ossPrimitiveFileOp.Tpo -c -o oss/edb-ossPrimitiveFileOp.obj `if test -f 'oss/ossPrimitiveFileOp.cpp'; then $(CYGPATH_W) 'oss/ossPrimitiveFileOp.cpp'; else $(CYGPATH_W) '$(srcdir)/oss/ossPrimitiveFileOp.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) oss/$(DEPDIR)/edb-ossPrimitiveFileOp.Tpo oss/$(DEPDIR)/edb-ossPrimitiveFileOp.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='oss/ossPrimitiveFileOp.cpp' object='oss/edb-ossPrimitiveFileOp.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(edb_CXXFLAGS) $(CXXFLAGS) -c -o oss/edb-ossPrimitiveFileOp.obj `if test -f 'oss/ossPrimitiveFileOp.cpp'; then $(CYGPATH_W) 'oss/ossPrimitiveFileOp.cpp'; else $(CYGPATH_W) '$(srcdir)/oss/ossPrimitiveFileOp.cpp'; fi`
+
+pd/edb-pd.o: pd/pd.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(edb_CXXFLAGS) $(CXXFLAGS) -MT pd/edb-pd.o -MD -MP -MF pd/$(DEPDIR)/edb-pd.Tpo -c -o pd/edb-pd.o `test -f 'pd/pd.cpp' || echo '$(srcdir)/'`pd/pd.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) pd/$(DEPDIR)/edb-pd.Tpo pd/$(DEPDIR)/edb-pd.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='pd/pd.cpp' object='pd/edb-pd.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(edb_CXXFLAGS) $(CXXFLAGS) -c -o pd/edb-pd.o `test -f 'pd/pd.cpp' || echo '$(srcdir)/'`pd/pd.cpp
+
+pd/edb-pd.obj: pd/pd.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(edb_CXXFLAGS) $(CXXFLAGS) -MT pd/edb-pd.obj -MD -MP -MF pd/$(DEPDIR)/edb-pd.Tpo -c -o pd/edb-pd.obj `if test -f 'pd/pd.cpp'; then $(CYGPATH_W) 'pd/pd.cpp'; else $(CYGPATH_W) '$(srcdir)/pd/pd.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) pd/$(DEPDIR)/edb-pd.Tpo pd/$(DEPDIR)/edb-pd.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='pd/pd.cpp' object='pd/edb-pd.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(edb_CXXFLAGS) $(CXXFLAGS) -c -o pd/edb-pd.obj `if test -f 'pd/pd.cpp'; then $(CYGPATH_W) 'pd/pd.cpp'; else $(CYGPATH_W) '$(srcdir)/pd/pd.cpp'; fi`
+
 pmd/yhzdb-pmdMain.o: pmd/pmdMain.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -MT pmd/yhzdb-pmdMain.o -MD -MP -MF pmd/$(DEPDIR)/yhzdb-pmdMain.Tpo -c -o pmd/yhzdb-pmdMain.o `test -f 'pmd/pmdMain.cpp' || echo '$(srcdir)/'`pmd/pmdMain.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) pmd/$(DEPDIR)/yhzdb-pmdMain.Tpo pmd/$(DEPDIR)/yhzdb-pmdMain.Po
@@ -727,6 +776,20 @@ pmd/yhzdb-pmdTcpListener.obj: pmd/pmdTcpListener.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='pmd/pmdTcpListener.cpp' object='pmd/yhzdb-pmdTcpListener.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -c -o pmd/yhzdb-pmdTcpListener.obj `if test -f 'pmd/pmdTcpListener.cpp'; then $(CYGPATH_W) 'pmd/pmdTcpListener.cpp'; else $(CYGPATH_W) '$(srcdir)/pmd/pmdTcpListener.cpp'; fi`
+
+pmd/yhzdb-pmdOptions.o: pmd/pmdOptions.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -MT pmd/yhzdb-pmdOptions.o -MD -MP -MF pmd/$(DEPDIR)/yhzdb-pmdOptions.Tpo -c -o pmd/yhzdb-pmdOptions.o `test -f 'pmd/pmdOptions.cpp' || echo '$(srcdir)/'`pmd/pmdOptions.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) pmd/$(DEPDIR)/yhzdb-pmdOptions.Tpo pmd/$(DEPDIR)/yhzdb-pmdOptions.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='pmd/pmdOptions.cpp' object='pmd/yhzdb-pmdOptions.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -c -o pmd/yhzdb-pmdOptions.o `test -f 'pmd/pmdOptions.cpp' || echo '$(srcdir)/'`pmd/pmdOptions.cpp
+
+pmd/yhzdb-pmdOptions.obj: pmd/pmdOptions.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -MT pmd/yhzdb-pmdOptions.obj -MD -MP -MF pmd/$(DEPDIR)/yhzdb-pmdOptions.Tpo -c -o pmd/yhzdb-pmdOptions.obj `if test -f 'pmd/pmdOptions.cpp'; then $(CYGPATH_W) 'pmd/pmdOptions.cpp'; else $(CYGPATH_W) '$(srcdir)/pmd/pmdOptions.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) pmd/$(DEPDIR)/yhzdb-pmdOptions.Tpo pmd/$(DEPDIR)/yhzdb-pmdOptions.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='pmd/pmdOptions.cpp' object='pmd/yhzdb-pmdOptions.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -c -o pmd/yhzdb-pmdOptions.obj `if test -f 'pmd/pmdOptions.cpp'; then $(CYGPATH_W) 'pmd/pmdOptions.cpp'; else $(CYGPATH_W) '$(srcdir)/pmd/pmdOptions.cpp'; fi`
 
 bson/src/yhzdb-bsonobj.o: bson/src/bsonobj.cpp
 @am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -MT bson/src/yhzdb-bsonobj.o -MD -MP -MF bson/src/$(DEPDIR)/yhzdb-bsonobj.Tpo -c -o bson/src/yhzdb-bsonobj.o `test -f 'bson/src/bsonobj.cpp' || echo '$(srcdir)/'`bson/src/bsonobj.cpp
@@ -839,6 +902,20 @@ oss/yhzdb-ossPrimitiveFileOp.obj: oss/ossPrimitiveFileOp.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='oss/ossPrimitiveFileOp.cpp' object='oss/yhzdb-ossPrimitiveFileOp.obj' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -c -o oss/yhzdb-ossPrimitiveFileOp.obj `if test -f 'oss/ossPrimitiveFileOp.cpp'; then $(CYGPATH_W) 'oss/ossPrimitiveFileOp.cpp'; else $(CYGPATH_W) '$(srcdir)/oss/ossPrimitiveFileOp.cpp'; fi`
+
+pd/yhzdb-pd.o: pd/pd.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -MT pd/yhzdb-pd.o -MD -MP -MF pd/$(DEPDIR)/yhzdb-pd.Tpo -c -o pd/yhzdb-pd.o `test -f 'pd/pd.cpp' || echo '$(srcdir)/'`pd/pd.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) pd/$(DEPDIR)/yhzdb-pd.Tpo pd/$(DEPDIR)/yhzdb-pd.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='pd/pd.cpp' object='pd/yhzdb-pd.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -c -o pd/yhzdb-pd.o `test -f 'pd/pd.cpp' || echo '$(srcdir)/'`pd/pd.cpp
+
+pd/yhzdb-pd.obj: pd/pd.cpp
+@am__fastdepCXX_TRUE@	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -MT pd/yhzdb-pd.obj -MD -MP -MF pd/$(DEPDIR)/yhzdb-pd.Tpo -c -o pd/yhzdb-pd.obj `if test -f 'pd/pd.cpp'; then $(CYGPATH_W) 'pd/pd.cpp'; else $(CYGPATH_W) '$(srcdir)/pd/pd.cpp'; fi`
+@am__fastdepCXX_TRUE@	$(AM_V_at)$(am__mv) pd/$(DEPDIR)/yhzdb-pd.Tpo pd/$(DEPDIR)/yhzdb-pd.Po
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	$(AM_V_CXX)source='pd/pd.cpp' object='pd/yhzdb-pd.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(AM_V_CXX@am__nodep@)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -c -o pd/yhzdb-pd.obj `if test -f 'pd/pd.cpp'; then $(CYGPATH_W) 'pd/pd.cpp'; else $(CYGPATH_W) '$(srcdir)/pd/pd.cpp'; fi`
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -1105,6 +1182,8 @@ distclean-generic:
 	-rm -f client/$(am__dirstamp)
 	-rm -f oss/$(DEPDIR)/$(am__dirstamp)
 	-rm -f oss/$(am__dirstamp)
+	-rm -f pd/$(DEPDIR)/$(am__dirstamp)
+	-rm -f pd/$(am__dirstamp)
 	-rm -f pmd/$(DEPDIR)/$(am__dirstamp)
 	-rm -f pmd/$(am__dirstamp)
 
@@ -1117,7 +1196,7 @@ clean-am: clean-binPROGRAMS clean-generic mostlyclean-am
 
 distclean: distclean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
-	-rm -rf bson/src/$(DEPDIR) bson/src/lib/$(DEPDIR) bson/src/util/$(DEPDIR) client/$(DEPDIR) oss/$(DEPDIR) pmd/$(DEPDIR)
+	-rm -rf bson/src/$(DEPDIR) bson/src/lib/$(DEPDIR) bson/src/util/$(DEPDIR) client/$(DEPDIR) oss/$(DEPDIR) pd/$(DEPDIR) pmd/$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-hdr distclean-tags
@@ -1165,7 +1244,7 @@ installcheck-am:
 maintainer-clean: maintainer-clean-am
 	-rm -f $(am__CONFIG_DISTCLEAN_FILES)
 	-rm -rf $(top_srcdir)/autom4te.cache
-	-rm -rf bson/src/$(DEPDIR) bson/src/lib/$(DEPDIR) bson/src/util/$(DEPDIR) client/$(DEPDIR) oss/$(DEPDIR) pmd/$(DEPDIR)
+	-rm -rf bson/src/$(DEPDIR) bson/src/lib/$(DEPDIR) bson/src/util/$(DEPDIR) client/$(DEPDIR) oss/$(DEPDIR) pd/$(DEPDIR) pmd/$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

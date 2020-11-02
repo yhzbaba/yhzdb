@@ -38,7 +38,7 @@ AC_TYPE_SSIZE_T
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 AC_FUNC_STRNLEN
-AC_CHECK_FUNCS([gethostbyname gethostname localtime_r memset pow select socket strchr strtol])
+AC_CHECK_FUNCS([gethostbyname gethostname gettimeofday localtime_r memset pow select socket strchr strtol])
 
 AC_CONFIG_FILES([Makefile])
 AC_OUTPUT
