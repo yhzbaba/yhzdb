@@ -27,6 +27,8 @@ uname -v = #124-Ubuntu SMP Thu Oct 15 13:03:05 UTC 2020
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
 
+PATH: /home/yhzbaba/.vscode-server/bin/d2e414d9e4239a252d1ab117bd7067f125afd80a/bin
+PATH: /home/yhzbaba/.vscode-server/bin/d2e414d9e4239a252d1ab117bd7067f125afd80a/bin
 PATH: /usr/local/sbin
 PATH: /usr/local/bin
 PATH: /usr/sbin
@@ -600,7 +602,7 @@ configure:5782: gcc -o conftest    conftest.c  >&5
 conftest.c:57:6: warning: conflicting types for built-in function 'pow' [-Wbuiltin-declaration-mismatch]
  char pow ();
       ^~~
-/tmp/ccwJt6dY.o: In function `main':
+/tmp/cc6Ca4hN.o: In function `main':
 conftest.c:(.text+0xa): undefined reference to `pow'
 collect2: error: ld returned 1 exit status
 configure:5782: $? = 1

@@ -138,7 +138,6 @@ static int pmdSetupSignalHandler()
 
 int pmdMasterThreadMain(int argc, char **argv)
 {
-  printf("111");
   int rc = EDB_OK;
   EDB_KRCB *krcb = pmdGetKRCB();
 
@@ -166,7 +165,7 @@ error:
 
 int main(int argc, char **argv)
 {
-  printf("main");
   // pmdTcpListenerEntryPoint();
+  PD_LOG(PDEVENT, "%s", "dfdfdf");
   return pmdMasterThreadMain(argc, argv);
 }
