@@ -166,6 +166,6 @@ error:
 int main(int argc, char **argv)
 {
   // pmdTcpListenerEntryPoint();
-  PD_LOG(PDEVENT, "%s", "dfdfdf");
+  // return 0;
   return pmdMasterThreadMain(argc, argv);
 }

@@ -100,7 +100,7 @@ int pmdOptions::importVM(const po::variables_map &vm, bool isDefault)
   if (vm.count(PMD_OPTION_SVCNAME))
   {
     p = vm[PMD_OPTION_SVCNAME].as<string>().c_str();
-    strncpy(_svcName, p, OSS_MAX_PATHSIZE);
+    strncpy(_svcName, p, NI_MAXSERV + 1);
   }
   else if (isDefault)
   {
@@ -124,7 +124,7 @@ int pmdOptions::readConfigureFile(const char *path, po::options_description &des
 {
   int rc = EDB_OK;
   char conf[OSS_MAX_PATHSIZE + 1] = {0};
-  strncpy(conf, path, OSS_MAX_PATHSIZE);
+  strncpy(conf, path, OSS_MAX_PATHSIZE + 1);
   try
   {
     po::store(po::parse_config_file<char>(conf, desc, true), vm);
@@ -195,6 +195,7 @@ int pmdOptions::init(int argc, char **argv)
            rc);
     goto error;
   }
+
   // load vm from file
   rc = importVM(vm2);
   if (rc)
@@ -203,12 +204,13 @@ int pmdOptions::init(int argc, char **argv)
     goto error;
   }
   // load vm from command line
-  rc = importVM(vm);
+  rc = importVM(vm, false);
   if (rc)
   {
     PD_LOG(PDERROR, "Failed to import from vm, rc = %d", rc);
     goto error;
   }
+
 done:
   return rc;
 error:

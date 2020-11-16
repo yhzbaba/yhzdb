@@ -100,8 +100,8 @@ void pdLog(PDLEVEL level, const char *func, const char *file, unsigned int line,
     return;
   }
   va_list ap;
-  char userInfo[PD_LOG_STRINGMAX]; // for user defined message
-  char sysInfo[PD_LOG_STRINGMAX];  // for log header
+  char userInfo[PD_LOG_STRINGMAX + 1]; // for user defined message
+  char sysInfo[PD_LOG_STRINGMAX + 1];  // for log header
   struct tm otm;
   struct timeval tv;
   struct timezone tz;

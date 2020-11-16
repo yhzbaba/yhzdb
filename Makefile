@@ -120,7 +120,7 @@ edb_LINK = $(CXXLD) $(edb_CXXFLAGS) $(CXXFLAGS) $(edb_LDFLAGS) \
 am_yhzdb_OBJECTS = pmd/yhzdb-pmdMain.$(OBJEXT) \
 	pmd/yhzdb-pmdTcpListener.$(OBJEXT) \
 	pmd/yhzdb-pmdOptions.$(OBJEXT) pmd/yhzdb-pmd.$(OBJEXT) \
-	bson/src/yhzdb-bsonobj.$(OBJEXT) \
+	pmd/yhzdb-pmdEDU.$(OBJEXT) bson/src/yhzdb-bsonobj.$(OBJEXT) \
 	bson/src/util/yhzdb-json.$(OBJEXT) \
 	bson/src/yhzdb-oid.$(OBJEXT) \
 	bson/src/lib/yhzdb-base64.$(OBJEXT) \
@@ -316,7 +316,7 @@ top_srcdir = .
 AUTOMAKE_OPTIONS = foreign subdir-objects
 yhzdb_SOURCES = \
 		  pmd/pmdMain.cpp pmd/pmdTcpListener.cpp pmd/pmdOptions.cpp\
-      pmd/pmd.cpp\
+      pmd/pmd.cpp pmd/pmdEDU.cpp\
 		  bson/src/bsonobj.cpp bson/src/util/json.cpp bson/src/oid.cpp\
 		  bson/src/lib/base64.cpp bson/src/lib/md5.cpp bson/src/lib/nonce.cpp\
       oss/ossSocket.cpp oss/ossPrimitiveFileOp.cpp\
@@ -508,6 +508,8 @@ pmd/yhzdb-pmdOptions.$(OBJEXT): pmd/$(am__dirstamp) \
 	pmd/$(DEPDIR)/$(am__dirstamp)
 pmd/yhzdb-pmd.$(OBJEXT): pmd/$(am__dirstamp) \
 	pmd/$(DEPDIR)/$(am__dirstamp)
+pmd/yhzdb-pmdEDU.$(OBJEXT): pmd/$(am__dirstamp) \
+	pmd/$(DEPDIR)/$(am__dirstamp)
 bson/src/yhzdb-bsonobj.$(OBJEXT): bson/src/$(am__dirstamp) \
 	bson/src/$(DEPDIR)/$(am__dirstamp)
 bson/src/util/yhzdb-json.$(OBJEXT): bson/src/util/$(am__dirstamp) \
@@ -565,6 +567,7 @@ include oss/$(DEPDIR)/yhzdb-ossSocket.Po
 include pd/$(DEPDIR)/edb-pd.Po
 include pd/$(DEPDIR)/yhzdb-pd.Po
 include pmd/$(DEPDIR)/yhzdb-pmd.Po
+include pmd/$(DEPDIR)/yhzdb-pmdEDU.Po
 include pmd/$(DEPDIR)/yhzdb-pmdMain.Po
 include pmd/$(DEPDIR)/yhzdb-pmdOptions.Po
 include pmd/$(DEPDIR)/yhzdb-pmdTcpListener.Po
@@ -808,6 +811,20 @@ pmd/yhzdb-pmd.obj: pmd/pmd.cpp
 #	$(AM_V_CXX)source='pmd/pmd.cpp' object='pmd/yhzdb-pmd.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -c -o pmd/yhzdb-pmd.obj `if test -f 'pmd/pmd.cpp'; then $(CYGPATH_W) 'pmd/pmd.cpp'; else $(CYGPATH_W) '$(srcdir)/pmd/pmd.cpp'; fi`
+
+pmd/yhzdb-pmdEDU.o: pmd/pmdEDU.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -MT pmd/yhzdb-pmdEDU.o -MD -MP -MF pmd/$(DEPDIR)/yhzdb-pmdEDU.Tpo -c -o pmd/yhzdb-pmdEDU.o `test -f 'pmd/pmdEDU.cpp' || echo '$(srcdir)/'`pmd/pmdEDU.cpp
+	$(AM_V_at)$(am__mv) pmd/$(DEPDIR)/yhzdb-pmdEDU.Tpo pmd/$(DEPDIR)/yhzdb-pmdEDU.Po
+#	$(AM_V_CXX)source='pmd/pmdEDU.cpp' object='pmd/yhzdb-pmdEDU.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -c -o pmd/yhzdb-pmdEDU.o `test -f 'pmd/pmdEDU.cpp' || echo '$(srcdir)/'`pmd/pmdEDU.cpp
+
+pmd/yhzdb-pmdEDU.obj: pmd/pmdEDU.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -MT pmd/yhzdb-pmdEDU.obj -MD -MP -MF pmd/$(DEPDIR)/yhzdb-pmdEDU.Tpo -c -o pmd/yhzdb-pmdEDU.obj `if test -f 'pmd/pmdEDU.cpp'; then $(CYGPATH_W) 'pmd/pmdEDU.cpp'; else $(CYGPATH_W) '$(srcdir)/pmd/pmdEDU.cpp'; fi`
+	$(AM_V_at)$(am__mv) pmd/$(DEPDIR)/yhzdb-pmdEDU.Tpo pmd/$(DEPDIR)/yhzdb-pmdEDU.Po
+#	$(AM_V_CXX)source='pmd/pmdEDU.cpp' object='pmd/yhzdb-pmdEDU.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -c -o pmd/yhzdb-pmdEDU.obj `if test -f 'pmd/pmdEDU.cpp'; then $(CYGPATH_W) 'pmd/pmdEDU.cpp'; else $(CYGPATH_W) '$(srcdir)/pmd/pmdEDU.cpp'; fi`
 
 bson/src/yhzdb-bsonobj.o: bson/src/bsonobj.cpp
 	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -MT bson/src/yhzdb-bsonobj.o -MD -MP -MF bson/src/$(DEPDIR)/yhzdb-bsonobj.Tpo -c -o bson/src/yhzdb-bsonobj.o `test -f 'bson/src/bsonobj.cpp' || echo '$(srcdir)/'`bson/src/bsonobj.cpp
