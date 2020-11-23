@@ -80,8 +80,7 @@ pmdEntryPoint getEntryFuncByType(EDU_TYPES type)
   pmdEntryPoint rt = NULL;
   // 线程启动就会执行--static 先注册
   static const _eduEntryInfo entry[] = {
-      // TODO this
-      /*ON_EDUTYPE_TO_ENTRY1(EDU_TYPE_AGENT, false, pmdAgentEntryPoint, "Agent"),*/
+      ON_EDUTYPE_TO_ENTRY1(EDU_TYPE_AGENT, false, pmdAgentEntryPoint, "Agent"),
       ON_EDUTYPE_TO_ENTRY1(EDU_TYPE_TCPLISTENER, true, pmdTcpListenerEntryPoint, "TCPListener"),
       ON_EDUTYPE_TO_ENTRY1(EDU_TYPE_MAXIMUM, false, NULL, "Unknown")};
 

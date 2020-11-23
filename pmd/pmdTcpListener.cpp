@@ -1,7 +1,7 @@
 /*
  * ==================================================================
  * 
- * Filename: pmdTcpListener.hpp
+ * Filename: pmdTcpListener.cpp
  * 
  * Created: 10/15/2020 14:00 PM
  * 
@@ -22,67 +22,108 @@
 int pmdTcpListenerEntryPoint(pmdEDUCB *cb, void *arg)
 {
   int rc = EDB_OK;
-  int port = 58127;
-  ossSocket sock(port);
-  rc = sock.initSocket();
-  if (rc)
+  pmdEDUMgr *eduMgr = cb->getEDUMgr();
+  EDUID myEDUID = cb->getID();
+  unsigned int retry = 0;
+  EDUID agentEDU = PMD_INVALID_EDUID;
+  char svcName[OSS_MAX_SERVICENAME + 1];
+  // 重试循环，如果因为网络问题进不去里层循环太多次那么我们就直接结束吧
+  while (retry <= PMD_TCPLISTENER_RETRY && !EDB_IS_DB_DOWN)
   {
-    printf("Failed to initalize socket, rc = %d", rc);
-    goto error;
-  }
-  rc = sock.bind_listen();
-  if (rc)
-  {
-    printf("Failed to bind/listen socket, rc = %d", rc);
-    goto error;
-  }
-  // master loop for tcp listener
-  while (true)
-  {
-    int s;
-    rc = sock.accept(&s, NULL, NULL);
-    if (EDB_TIMEOUT == rc)
-    {
-      rc = EDB_OK;
-      continue;
-    }
-    char buffer[1024];
-    int size;
-    ossSocket sock1(&s);
-    sock1.disableNagle();
-    do
-    {
-      rc = sock1.recv((char *)&size, 4);
-      if (rc && rc != EDB_TIMEOUT)
-      {
-        printf("Failed to receive size, rc = %d", rc);
-        goto error;
-      }
-    } while (rc == EDB_TIMEOUT);
-    do
-    {
-      rc = sock1.recv(&buffer[0], size - sizeof(int));
-      if (rc && rc != EDB_TIMEOUT)
-      {
-        printf("Failed to receive buffer, rc = %d", rc);
-        goto error;
-      }
-    } while (rc == EDB_TIMEOUT);
-    printf("%s\n", buffer);
-    sock1.close();
-  }
+    retry++;
 
+    strcpy(svcName, pmdGetKRCB()->getSvcName());
+    PD_LOG(PDEVENT, "Listening on port_test %s\n", svcName);
+
+    int port = 0;
+    int len = strlen(svcName);
+    for (int i = 0; i < len; i++)
+    {
+      // 字符串转成数字，即端口号
+      if (svcName[i] >= '0' && svcName[i] <= '9')
+      {
+        port = port * 10;
+        port += int(svcName[i] - '0');
+      }
+      else
+      {
+        PD_LOG(PDERROR, "service name error!\n");
+      }
+    }
+
+    ossSocket sock(port);
+    rc = sock.initSocket();
+    EDB_VALIDATE_GOTOERROR(EDB_OK == rc, rc, "Failed initialize socket")
+
+    rc = sock.bind_listen();
+    EDB_VALIDATE_GOTOERROR(EDB_OK == rc, rc, "Failed to bind/listen socket");
+    // once bind is successful, let's set the state of EDU to RUNNING
+    if (EDB_OK != (rc = eduMgr->activateEDU(myEDUID)))
+    {
+      goto error;
+    }
+    // 监听循环
+    while (!EDB_IS_DB_DOWN)
+    {
+      int s;
+      rc = sock.accept(&s, NULL, NULL);
+      // 因为是监听超时，所以不妨继续
+      if (EDB_TIMEOUT == rc)
+      {
+        rc = EDB_OK;
+        continue;
+      }
+      // 裂开了就直接结束
+      if (rc && EDB_IS_DB_DOWN)
+      {
+        rc = EDB_OK;
+        goto done;
+      }
+      else if (rc)
+      {
+        // 重启本地socket即可
+        PD_LOG(PDERROR, "Failed to accept socket in TcpListener");
+        PD_LOG(PDEVENT, "Restarting socket to listen");
+        break;
+      }
+
+      // assign the socket to the arg
+      void *pData = NULL;
+      *((int *)&pData) = s;
+
+      rc = eduMgr->startEDU(EDU_TYPE_AGENT, pData, &agentEDU);
+      if (rc)
+      {
+        if (rc == EDB_QUIESCED)
+        {
+          // we cannot start EDU due to quiesced
+          PD_LOG(PDWARNING, "Reject new connection due to quiesced database");
+        }
+        else
+        {
+          PD_LOG(PDERROR, "Failed to start EDU agent");
+        }
+        // close remote connection if we can't create new thread
+        ossSocket newsock(&s);
+        newsock.close();
+        continue;
+      }
+    }
+    if (EDB_OK != (rc = eduMgr->waitEDU(myEDUID)))
+    {
+      goto error;
+    }
+  } // while(retry <= PMD_TCPLISTENER_RETRY)
 done:
   return rc;
 error:
   switch (rc)
   {
   case EDB_SYS:
-    printf("System error occurred!\n");
+    PD_LOG(PDSEVERE, "System error occured");
     break;
   default:
-    printf("Internal error!\n");
+    PD_LOG(PDSEVERE, "Internal error");
   }
-
   goto done;
 }

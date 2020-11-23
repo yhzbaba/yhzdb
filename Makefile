@@ -121,7 +121,7 @@ am_yhzdb_OBJECTS = pmd/yhzdb-pmdMain.$(OBJEXT) \
 	pmd/yhzdb-pmdTcpListener.$(OBJEXT) \
 	pmd/yhzdb-pmdOptions.$(OBJEXT) pmd/yhzdb-pmd.$(OBJEXT) \
 	pmd/yhzdb-pmdEDU.$(OBJEXT) pmd/yhzdb-pmdEDUMgr.$(OBJEXT) \
-	bson/src/yhzdb-bsonobj.$(OBJEXT) \
+	pmd/yhzdb-pmdAgent.$(OBJEXT) bson/src/yhzdb-bsonobj.$(OBJEXT) \
 	bson/src/util/yhzdb-json.$(OBJEXT) \
 	bson/src/yhzdb-oid.$(OBJEXT) \
 	bson/src/lib/yhzdb-base64.$(OBJEXT) \
@@ -317,7 +317,7 @@ top_srcdir = .
 AUTOMAKE_OPTIONS = foreign subdir-objects
 yhzdb_SOURCES = \
 		  pmd/pmdMain.cpp pmd/pmdTcpListener.cpp pmd/pmdOptions.cpp\
-      pmd/pmd.cpp pmd/pmdEDU.cpp pmd/pmdEDUMgr.cpp\
+      pmd/pmd.cpp pmd/pmdEDU.cpp pmd/pmdEDUMgr.cpp pmd/pmdAgent.cpp\
 		  bson/src/bsonobj.cpp bson/src/util/json.cpp bson/src/oid.cpp\
 		  bson/src/lib/base64.cpp bson/src/lib/md5.cpp bson/src/lib/nonce.cpp\
       oss/ossSocket.cpp oss/ossPrimitiveFileOp.cpp\
@@ -513,6 +513,8 @@ pmd/yhzdb-pmdEDU.$(OBJEXT): pmd/$(am__dirstamp) \
 	pmd/$(DEPDIR)/$(am__dirstamp)
 pmd/yhzdb-pmdEDUMgr.$(OBJEXT): pmd/$(am__dirstamp) \
 	pmd/$(DEPDIR)/$(am__dirstamp)
+pmd/yhzdb-pmdAgent.$(OBJEXT): pmd/$(am__dirstamp) \
+	pmd/$(DEPDIR)/$(am__dirstamp)
 bson/src/yhzdb-bsonobj.$(OBJEXT): bson/src/$(am__dirstamp) \
 	bson/src/$(DEPDIR)/$(am__dirstamp)
 bson/src/util/yhzdb-json.$(OBJEXT): bson/src/util/$(am__dirstamp) \
@@ -570,6 +572,7 @@ include oss/$(DEPDIR)/yhzdb-ossSocket.Po
 include pd/$(DEPDIR)/edb-pd.Po
 include pd/$(DEPDIR)/yhzdb-pd.Po
 include pmd/$(DEPDIR)/yhzdb-pmd.Po
+include pmd/$(DEPDIR)/yhzdb-pmdAgent.Po
 include pmd/$(DEPDIR)/yhzdb-pmdEDU.Po
 include pmd/$(DEPDIR)/yhzdb-pmdEDUMgr.Po
 include pmd/$(DEPDIR)/yhzdb-pmdMain.Po
@@ -843,6 +846,20 @@ pmd/yhzdb-pmdEDUMgr.obj: pmd/pmdEDUMgr.cpp
 #	$(AM_V_CXX)source='pmd/pmdEDUMgr.cpp' object='pmd/yhzdb-pmdEDUMgr.obj' libtool=no \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -c -o pmd/yhzdb-pmdEDUMgr.obj `if test -f 'pmd/pmdEDUMgr.cpp'; then $(CYGPATH_W) 'pmd/pmdEDUMgr.cpp'; else $(CYGPATH_W) '$(srcdir)/pmd/pmdEDUMgr.cpp'; fi`
+
+pmd/yhzdb-pmdAgent.o: pmd/pmdAgent.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -MT pmd/yhzdb-pmdAgent.o -MD -MP -MF pmd/$(DEPDIR)/yhzdb-pmdAgent.Tpo -c -o pmd/yhzdb-pmdAgent.o `test -f 'pmd/pmdAgent.cpp' || echo '$(srcdir)/'`pmd/pmdAgent.cpp
+	$(AM_V_at)$(am__mv) pmd/$(DEPDIR)/yhzdb-pmdAgent.Tpo pmd/$(DEPDIR)/yhzdb-pmdAgent.Po
+#	$(AM_V_CXX)source='pmd/pmdAgent.cpp' object='pmd/yhzdb-pmdAgent.o' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -c -o pmd/yhzdb-pmdAgent.o `test -f 'pmd/pmdAgent.cpp' || echo '$(srcdir)/'`pmd/pmdAgent.cpp
+
+pmd/yhzdb-pmdAgent.obj: pmd/pmdAgent.cpp
+	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -MT pmd/yhzdb-pmdAgent.obj -MD -MP -MF pmd/$(DEPDIR)/yhzdb-pmdAgent.Tpo -c -o pmd/yhzdb-pmdAgent.obj `if test -f 'pmd/pmdAgent.cpp'; then $(CYGPATH_W) 'pmd/pmdAgent.cpp'; else $(CYGPATH_W) '$(srcdir)/pmd/pmdAgent.cpp'; fi`
+	$(AM_V_at)$(am__mv) pmd/$(DEPDIR)/yhzdb-pmdAgent.Tpo pmd/$(DEPDIR)/yhzdb-pmdAgent.Po
+#	$(AM_V_CXX)source='pmd/pmdAgent.cpp' object='pmd/yhzdb-pmdAgent.obj' libtool=no \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(AM_V_CXX_no)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -c -o pmd/yhzdb-pmdAgent.obj `if test -f 'pmd/pmdAgent.cpp'; then $(CYGPATH_W) 'pmd/pmdAgent.cpp'; else $(CYGPATH_W) '$(srcdir)/pmd/pmdAgent.cpp'; fi`
 
 bson/src/yhzdb-bsonobj.o: bson/src/bsonobj.cpp
 	$(AM_V_CXX)$(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(yhzdb_CXXFLAGS) $(CXXFLAGS) -MT bson/src/yhzdb-bsonobj.o -MD -MP -MF bson/src/$(DEPDIR)/yhzdb-bsonobj.Tpo -c -o bson/src/yhzdb-bsonobj.o `test -f 'bson/src/bsonobj.cpp' || echo '$(srcdir)/'`bson/src/bsonobj.cpp
