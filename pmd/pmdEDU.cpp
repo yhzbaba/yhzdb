@@ -173,8 +173,7 @@ int pmdEDUEntryPoint(EDU_TYPES type, pmdEDUCB *cb, void *arg)
     if (!isForced && PMD_EDU_EVENT_RESUME == event._eventType)
     {
       // set EDU status to wait
-      // TODO this
-      // eduMgr->waitEDU(myEDUID);
+      eduMgr->waitEDU(myEDUID);
       // run the main function
       pmdEntryPoint entryFunc = getEntryFuncByType(type);
       if (!entryFunc)
@@ -203,8 +202,7 @@ int pmdEDUEntryPoint(EDU_TYPES type, pmdEDUCB *cb, void *arg)
         }
       }
       //空闲的EDU放到等待状态
-      // TODO this
-      // eduMgr->waitEDU(myEDUID);
+      eduMgr->waitEDU(myEDUID);
     }
     else if (!isForced && PMD_EDU_EVENT_TERM != event._eventType)
     {
@@ -226,8 +224,7 @@ int pmdEDUEntryPoint(EDU_TYPES type, pmdEDUCB *cb, void *arg)
     }
 
     // 如果经过线程池判断应该被销毁，eduDestroyed会被设置成true，下次跳出循环
-    // TODO this
-    // rc = eduMgr->returnEDU(myEDUID, isForced, &eduDestroyed);
+    rc = eduMgr->returnEDU(myEDUID, isForced, &eduDestroyed);
     if (rc)
     {
       PD_LOG(PDERROR, "Invalid EDU Status for EDU: %lld, type %s",

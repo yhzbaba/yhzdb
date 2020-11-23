@@ -21,10 +21,10 @@
 
 #define PMD_INVALID_EDUID 0
 #define PMD_IS_EDU_CREATING(x) (PMD_EDU_CREATING == x)
-#define PMD_IS_EDU_RUNNING(x) (PMD_IS_EDU_RUNNING == x)
-#define PMD_IS_EDU_WAITING(x) (PMD_IS_EDU_WAITING == x)
+#define PMD_IS_EDU_RUNNING(x) (PMD_EDU_RUNNING == x)
+#define PMD_IS_EDU_WAITING(x) (PMD_EDU_WAITING == x)
 #define PMD_IS_EDU_IDLE(x) (PMD_EDU_IDLE == x)
-#define PMD_IS_EDU_DESTROY(x) (PMD_EDU_DESTORY == x)
+#define PMD_IS_EDU_DESTROY(x) (PMD_EDU_DESTROY == x)
 
 typedef unsigned long long EDUID;
 
