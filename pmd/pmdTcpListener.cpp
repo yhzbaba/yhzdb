@@ -33,7 +33,6 @@ int pmdTcpListenerEntryPoint(pmdEDUCB *cb, void *arg)
     retry++;
 
     strcpy(svcName, pmdGetKRCB()->getSvcName());
-    PD_LOG(PDEVENT, "Listening on port_test %s\n", svcName);
 
     int port = 0;
     int len = strlen(svcName);
@@ -96,14 +95,13 @@ int pmdTcpListenerEntryPoint(pmdEDUCB *cb, void *arg)
       {
         if (rc == EDB_QUIESCED)
         {
-          // we cannot start EDU due to quiesced
           PD_LOG(PDWARNING, "Reject new connection due to quiesced database");
         }
         else
         {
           PD_LOG(PDERROR, "Failed to start EDU agent");
         }
-        // close remote connection if we can't create new thread
+        // fail, close socket
         ossSocket newsock(&s);
         newsock.close();
         continue;

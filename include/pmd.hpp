@@ -13,6 +13,7 @@
 #define PMD_HPP__
 
 #include "core.hpp"
+#include "pmdEDUMgr.hpp"
 
 // 正常，关闭，非正常退出状态
 enum EDB_DB_STATUS
@@ -40,6 +41,8 @@ private:
   char _svcName[NI_MAXSERV + 1];
   EDB_DB_STATUS _dbStatus;
 
+  pmdEDUMgr _eduMgr;
+
 public:
   EDB_KRCB()
   {
@@ -50,6 +53,11 @@ public:
     _maxPool = 0;
   }
   ~EDB_KRCB() {}
+
+  pmdEDUMgr *getEDUMgr()
+  {
+    return &_eduMgr;
+  }
 
   // get database status
   inline EDB_DB_STATUS getDBStatus()

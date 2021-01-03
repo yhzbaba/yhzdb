@@ -180,3 +180,34 @@ File:pmd/pmd.cpp
 Message:
 20
 
+2021-01-03-07.01.26.487375Level:EVENT
+PID:4665                                 TID:4665
+Function:init                            Line:27
+File:pmd/pmd.cpp
+Message:
+20
+
+2021-01-03-07.01.26.800350Level:EVENT
+PID:4665                                 TID:4666
+Function:pmdTcpListenerEntryPoint        Line:36
+File:pmd/pmdTcpListener.cpp
+Message:
+Listening on port_test ./58127
+
+
+2021-01-03-07.01.26.801296Level:ERROR
+PID:4665                                 TID:4666
+Function:pmdTcpListenerEntryPoint        Line:50
+File:pmd/pmdTcpListener.cpp
+Message:
+service name error!
+
+
+2021-01-03-07.01.26.801521Level:ERROR
+PID:4665                                 TID:4666
+Function:pmdTcpListenerEntryPoint        Line:50
+File:pmd/pmdTcpListener.cpp
+Message:
+service name error!
+
+
